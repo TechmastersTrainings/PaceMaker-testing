@@ -1,0 +1,90 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev} # Allows overriding profile in production (e.g., 'prod')
+
+  datasource:
+    # Added safe defaults for local development; Render will override these via its Environment Variables
+    url: ${DB_URL:jdbc:mysql://localhost:3306/pacemaker?createDatabaseIfNotExist=true}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+  jpa:
+    hibernate:
+      # Use 'none' or 'validate' in production, 'update' is fine for development
+      ddl-auto: ${HIBERNATE_DDL_AUTO:update}
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        generate_statistics: true
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+        order_updates: true
+    open-in-view: false
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:YOUR_EMAIL@gmail.com}
+    password: ${MAIL_PASSWORD:APP_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  cache:
+    type: none 
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+
+jwt:
+  secret: ${JWT_SECRET:mysecretkeymysecretkeymysecretkey123456} # Securely overridable in prod
+  expiration: ${JWT_EXPIRATION:86400000}
+
+mux:
+  token:
+    id: ${MUX_TOKEN_ID:test-token-id}
+    secret: ${MUX_TOKEN_SECRET:test-token-secret}
+
+discourse:
+  base-url: ${DISCOURSE_BASE_URL:https://community.example.com}
+  sso-secret: ${DISCOURSE_SSO_SECRET:discourse-secret-key}
+
+razorpay:
+  key:
+    id: ${RAZORPAY_KEY_ID:YOUR_KEY}
+    secret: ${RAZORPAY_KEY_SECRET:YOUR_SECRET}
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        stat: DEBUG
