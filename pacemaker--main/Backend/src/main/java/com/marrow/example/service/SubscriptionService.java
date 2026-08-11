@@ -63,7 +63,7 @@ public class SubscriptionService {
                 orderId = razorpayOrder.get("id");
             } catch (Exception e) {
                 log.warn("Failed to create Razorpay order (Credentials might be unconfigured). Falling back to local offline test order ID.", e);
-                orderId = "sub_offline_" + System.currentTimeMillis();
+                orderId = "order_test_" + System.currentTimeMillis();
             }
 
             UserSubscription userSubscription = UserSubscription.builder()
