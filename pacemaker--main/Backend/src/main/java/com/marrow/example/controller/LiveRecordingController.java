@@ -23,11 +23,9 @@ public class LiveRecordingController {
     }
 
     // UPLOAD RECORDING
-
     @PostMapping
-
-    public LiveRecordingResponse
-    uploadRecording(
+    @org.springframework.security.access.prepost.PreAuthorize("hasRole('ADMIN') or hasRole('TRAINER') or hasRole('INSTRUCTOR')")
+    public LiveRecordingResponse uploadRecording(
 
             @RequestBody
             LiveRecordingRequest request) {

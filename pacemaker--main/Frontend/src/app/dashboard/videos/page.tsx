@@ -18,6 +18,7 @@ import {
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSubscription } from '@/hooks/useSubscription';
+import { useAuth } from '@/contexts/AuthContext';
 import { videoService } from '@/services/videoService';
 import type { VideoResponse } from '@/services/videoService';
 import ErrorBoundary from '@/components/ErrorBoundary';
@@ -81,6 +82,8 @@ const fadeUp = (delay = 0) => ({
 
 function StudentVideosPage() {
   const { canAccess, loading: subLoading } = useSubscription();
+  const { user } = useAuth();
+  const isInstructorOrAdmin = user?.role === 'INSTRUCTOR' || user?.role === 'TRAINER' || user?.role === 'ADMIN';
   const [videos, setVideos] = useState<VideoResponse[]>([]);
   const [categoryProgress, setCategoryProgress] = useState<Record<string, { total: number; completed: number }>>({});
   const [isLoading, setIsLoading] = useState(true);
@@ -350,15 +353,17 @@ function StudentVideosPage() {
             <p className="text-sm text-stone-400 font-medium">{videos.length} modules &bull; {categories.length} categories</p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={handleUploadClick}
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-lg text-sm font-bold transition-all shadow-sm cursor-pointer border-none"
-          >
-            <Upload className="w-4 h-4" /> Upload
-          </button>
-          <input ref={fileInputRef} type="file" accept="video/*" className="hidden" onChange={handleFileSelect} />
-        </div>
+        {isInstructorOrAdmin && (
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleUploadClick}
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-lg text-sm font-bold transition-all shadow-sm cursor-pointer border-none"
+            >
+              <Upload className="w-4 h-4" /> Upload
+            </button>
+            <input ref={fileInputRef} type="file" accept="video/*" className="hidden" onChange={handleFileSelect} />
+          </div>
+        )}
       </motion.div>
 
       {/* ── Upload Progress Panel ── */}
@@ -591,30 +596,32 @@ function StudentVideosPage() {
                       <h3 className="text-sm font-bold text-stone-900 group-hover:text-primary-600 transition-colors leading-snug line-clamp-2 flex-1">
                         {video.title}
                       </h3>
-                      <div className="relative shrink-0" ref={openMenuId === String(video.id) ? menuRef : undefined}>
-                        <button onClick={(e) => { e.stopPropagation(); setOpenMenuId(openMenuId === String(video.id) ? null : String(video.id)); }}
-                          className="p-1.5 text-stone-400 hover:text-stone-600 rounded-lg hover:bg-stone-100 transition-colors bg-transparent border-none cursor-pointer"
-                        >
-                          <MoreHorizontal className="w-4 h-4" />
-                        </button>
-                        <AnimatePresence>
-                          {openMenuId === String(video.id) && (
-                            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
-                              className="absolute right-0 top-full mt-1 w-40 bg-white rounded-lg border border-stone-200 shadow-xl z-20 py-1 overflow-hidden"
-                            >
-                              <button onClick={() => handleWatchClick(video)}
-                                className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-stone-700 hover:bg-primary-50 hover:text-primary-600 transition-colors border-none bg-transparent cursor-pointer text-left"
-                              ><Play className="w-3.5 h-3.5" /> Watch</button>
-                              <button onClick={() => handleEditOpen(video)}
-                                className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-stone-700 hover:bg-primary-50 hover:text-primary-600 transition-colors border-none bg-transparent cursor-pointer text-left"
-                              ><Edit3 className="w-3.5 h-3.5" /> Edit</button>
-                              <button onClick={() => handleDeleteVideo(video)}
-                                className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors border-none bg-transparent cursor-pointer text-left"
-                              ><Trash2 className="w-3.5 h-3.5" /> Delete</button>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
+                      {isInstructorOrAdmin && (
+                        <div className="relative shrink-0" ref={openMenuId === String(video.id) ? menuRef : undefined}>
+                          <button onClick={(e) => { e.stopPropagation(); setOpenMenuId(openMenuId === String(video.id) ? null : String(video.id)); }}
+                            className="p-1.5 text-stone-400 hover:text-stone-600 rounded-lg hover:bg-stone-100 transition-colors bg-transparent border-none cursor-pointer"
+                          >
+                            <MoreHorizontal className="w-4 h-4" />
+                          </button>
+                          <AnimatePresence>
+                            {openMenuId === String(video.id) && (
+                              <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
+                                className="absolute right-0 top-full mt-1 w-40 bg-white rounded-lg border border-stone-200 shadow-xl z-20 py-1 overflow-hidden"
+                              >
+                                <button onClick={() => handleWatchClick(video)}
+                                  className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-stone-700 hover:bg-primary-50 hover:text-primary-600 transition-colors border-none bg-transparent cursor-pointer text-left"
+                                ><Play className="w-3.5 h-3.5" /> Watch</button>
+                                <button onClick={() => handleEditOpen(video)}
+                                  className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-stone-700 hover:bg-primary-50 hover:text-primary-600 transition-colors border-none bg-transparent cursor-pointer text-left"
+                                ><Edit3 className="w-3.5 h-3.5" /> Edit</button>
+                                <button onClick={() => handleDeleteVideo(video)}
+                                  className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors border-none bg-transparent cursor-pointer text-left"
+                                ><Trash2 className="w-3.5 h-3.5" /> Delete</button>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      )}
                     </div>
 
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mb-3 text-xs font-medium text-stone-400">
@@ -706,14 +713,18 @@ function StudentVideosPage() {
                       className="p-2 text-stone-400 hover:text-primary-600 rounded-lg hover:bg-primary-50 transition-colors bg-transparent border-none cursor-pointer"
                       title="Watch"
                     ><Play className="w-4 h-4" /></button>
-                    <button onClick={() => handleEditOpen(video)}
-                      className="p-2 text-stone-400 hover:text-primary-600 rounded-lg hover:bg-primary-50 transition-colors bg-transparent border-none cursor-pointer"
-                      title="Edit"
-                    ><Edit3 className="w-4 h-4" /></button>
-                    <button onClick={() => handleDeleteVideo(video)}
-                      className="p-2 text-stone-400 hover:text-red-500 rounded-lg hover:bg-red-50 transition-colors bg-transparent border-none cursor-pointer"
-                      title="Delete"
-                    ><Trash2 className="w-4 h-4" /></button>
+                    {isInstructorOrAdmin && (
+                      <>
+                        <button onClick={() => handleEditOpen(video)}
+                          className="p-2 text-stone-400 hover:text-primary-600 rounded-lg hover:bg-primary-50 transition-colors bg-transparent border-none cursor-pointer"
+                          title="Edit"
+                        ><Edit3 className="w-4 h-4" /></button>
+                        <button onClick={() => handleDeleteVideo(video)}
+                          className="p-2 text-stone-400 hover:text-red-500 rounded-lg hover:bg-red-50 transition-colors bg-transparent border-none cursor-pointer"
+                          title="Delete"
+                        ><Trash2 className="w-4 h-4" /></button>
+                      </>
+                    )}
                   </div>
                 </div>
               );
