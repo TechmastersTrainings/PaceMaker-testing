@@ -1,0 +1,6 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "cd pacemaker--main/Frontend && npm install && npm run build",
+  "outputDirectory": "pacemaker--main/Frontend/.next",
+  "framework": "nextjs"
+}
