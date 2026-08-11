@@ -1,0 +1,51 @@
+# Logs
+*.log
+**/*.log
+
+# Node dependencies and build files
+node_modules/
+**/node_modules/
+.next/
+**/.next/
+dist/
+**/dist/
+out/
+**/out/
+build/
+**/build/
+*.tsbuildinfo
+
+# Python Virtual Environments & Caches
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+**/venv/
+.venv/
+**/.venv/
+
+# Environment files
+.env
+.env.*
+**/.env
+**/.env.*
+
+# Maven build outputs
+**/target/
+**/.metadata/
+**/.apt_generated/
+**/.apt_generated_tests/
+
+# Operating System & IDE files
+.DS_Store
+**/.DS_Store
+.idea/
+.vscode/
+
+# Archive / compressed files
+*.zip
+*.tar.gz
+*.rar
+*.7z

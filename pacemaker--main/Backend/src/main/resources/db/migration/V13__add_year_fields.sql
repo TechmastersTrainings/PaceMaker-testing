@@ -1,0 +1,2 @@
+ALTER TABLE study_materials ADD COLUMN year INT DEFAULT NULL;
+ALTER TABLE users ADD COLUMN current_year INT DEFAULT NULL;

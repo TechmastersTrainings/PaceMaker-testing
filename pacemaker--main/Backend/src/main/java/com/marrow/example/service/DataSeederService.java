@@ -1,0 +1,151 @@
+package com.marrow.example.service;
+
+import com.marrow.example.dto.SeedResponseDto;
+import com.marrow.example.dto.SeedStatusDto;
+import com.marrow.example.entity.Course;
+import com.marrow.example.entity.SubscriptionPlan;
+import com.marrow.example.enums.SubscriptionType;
+import com.marrow.example.repository.CourseRepository;
+import com.marrow.example.repository.MockExamRepository;
+import com.marrow.example.repository.QuestionRepository;
+import com.marrow.example.repository.UserRepository;
+import com.marrow.example.repository.SubscriptionPlanRepository;
+import com.marrow.example.seeder.MockExamSeeder;
+import com.marrow.example.seeder.QuestionSeeder;
+import com.marrow.example.seeder.UserSeeder;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class DataSeederService {
+
+    private final UserSeeder userSeeder;
+    private final QuestionSeeder questionSeeder;
+    private final MockExamSeeder mockExamSeeder;
+    
+    private final UserRepository userRepository;
+    private final QuestionRepository questionRepository;
+    private final MockExamRepository mockExamRepository;
+    private final SubscriptionPlanRepository subscriptionPlanRepository;
+    private final CourseRepository courseRepository;
+
+    @Transactional
+    public SeedResponseDto runSeedData() {
+        log.info("Starting data seeding process...");
+        
+        // Seed subscription plans first
+        seedSubscriptionPlans();
+
+        // Seed medical courses
+        seedCourses();
+        
+        userSeeder.seedSubjects();
+        int trainers = userSeeder.seedTrainers();
+        int students = userSeeder.seedStudents();
+        int questions = questionSeeder.seedQuestions();
+        int mockExams = mockExamSeeder.seedMockExams();
+
+        return SeedResponseDto.builder()
+                .studentsCreated(students)
+                .trainersCreated(trainers)
+                .questionsCreated(questions)
+                .mockExamsCreated(mockExams)
+                .build();
+    }
+
+    private void seedSubscriptionPlans() {
+        if (subscriptionPlanRepository.count() == 0) {
+            subscriptionPlanRepository.save(SubscriptionPlan.builder()
+                    .planType(SubscriptionType.BASIC)
+                    .price(2999.0)
+                    .qbankAccess(false)
+                    .videoAccess(false)
+                    .liveClassAccess(false)
+                    .aiAccess(false)
+                    .description("Plan A — Grand Tests & Mock Series Only")
+                    .build());
+
+            subscriptionPlanRepository.save(SubscriptionPlan.builder()
+                    .planType(SubscriptionType.MEDIUM)
+                    .price(6999.0)
+                    .qbankAccess(true)
+                    .videoAccess(false)
+                    .liveClassAccess(false)
+                    .aiAccess(false)
+                    .description("Plan B — QBank + Test Series (No Video Lectures)")
+                    .build());
+
+            subscriptionPlanRepository.save(SubscriptionPlan.builder()
+                    .planType(SubscriptionType.HIGH)
+                    .price(9999.0)
+                    .qbankAccess(true)
+                    .videoAccess(true)
+                    .liveClassAccess(true)
+                    .aiAccess(true)
+                    .description("Plan C — Everything: Lectures + QBank + Tests + AI")
+                    .build());
+            log.info("Seeded 3 subscription plans (BASIC, MEDIUM, HIGH)");
+        }
+    }
+
+    private void seedCourses() {
+        if (courseRepository.count() > 0) {
+            log.info("Courses already seeded, skipping.");
+            return;
+        }
+        courseRepository.save(Course.builder()
+                .courseName("Anatomy Masterclass")
+                .description("A comprehensive high-yield anatomy course covering all clinically significant structures tested in NEET PG and INICET. Includes detailed dissections, radiological anatomy, and surface markings.")
+                .subject("Anatomy")
+                .level("High-yield")
+                .thumbnailUrl("/anatomy_course.png")
+                .build());
+
+        courseRepository.save(Course.builder()
+                .courseName("Clinical Physiology")
+                .description("Master the core physiological concepts with clinical correlations. From membrane potentials to cardiovascular hemodynamics — taught with real case scenarios to strengthen your clinical reasoning.")
+                .subject("Physiology")
+                .level("Core Concepts")
+                .thumbnailUrl("/physiology_course.png")
+                .build());
+
+        courseRepository.save(Course.builder()
+                .courseName("Biochemistry Elite")
+                .description("Essential biochemistry made exam-ready. Covers metabolic pathways, enzyme kinetics, molecular biology, and inherited metabolic disorders with mnemonics and high-yield tables.")
+                .subject("Biochemistry")
+                .level("Essentials")
+                .thumbnailUrl("/biochemistry_course.png")
+                .build());
+
+        courseRepository.save(Course.builder()
+                .courseName("Advanced Pathology")
+                .description("Deep-dive into clinical pathology with case-based modules. Covers general pathology, systemic pathology, histopathology slides interpretation, and high-frequency exam topics in detail.")
+                .subject("Pathology")
+                .level("Clinical Cases")
+                .thumbnailUrl("/pathology_course.png")
+                .build());
+
+        log.info("Seeded 4 medical courses (Anatomy, Physiology, Biochemistry, Pathology).");
+    }
+
+    public SeedStatusDto getSeedStatus() {
+        long students = userRepository.countByRole("STUDENT");
+        long trainers = userRepository.countByRole("TRAINER");
+        long questions = questionRepository.count();
+        long mockExams = mockExamRepository.count();
+        long total = students + trainers + questions + mockExams;
+        
+        return SeedStatusDto.builder()
+                .completed(total > 0)
+                .recordsCreated(total)
+                .students(students)
+                .trainers(trainers)
+                .questions(questions)
+                .mockExams(mockExams)
+                .build();
+    }
+}

@@ -1,0 +1,25 @@
+package com.marrow.example.enums;
+
+public enum VideoCategory {
+    ANATOMY,
+    PHYSIOLOGY,
+    BIOCHEMISTRY,
+    PATHOLOGY,
+    PHARMACOLOGY,
+    MICROBIOLOGY,
+    FORENSIC_MEDICINE,
+    COMMUNITY_MEDICINE,
+    OPHTHALMOLOGY,
+    ENT,
+    MEDICINE,
+    SURGERY,
+    PEDIATRICS,
+    ORTHOPEDICS,
+    OBSTETRICS_GYNECOLOGY,
+    DERMATOLOGY,
+    PSYCHIATRY,
+    RADIOLOGY,
+    ANESTHESIA,
+    NEET_PG,
+    INI_CET
+}

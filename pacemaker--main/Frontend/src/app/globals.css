@@ -1,0 +1,334 @@
+@import "tailwindcss";
+
+
+@theme {
+  --color-primary-50: #eef7ff;
+  --color-primary-100: #d9efff;
+  --color-primary-200: #bce1ff;
+  --color-primary-300: #0FFCBE;
+  /* Mint */
+  --color-primary-400: #1a88df;
+  --color-primary-500: #106EBE;
+  /* Corporate Blue */
+  --color-primary-600: #0c5a9e;
+  /* Hover Blue */
+  --color-primary-700: #0a467e;
+  --color-primary-800: #08325c;
+  --color-primary-900: #052140;
+
+  --font-sans: var(--font-sans), sans-serif;
+  --font-display: var(--font-display), sans-serif;
+
+  /* Global typography scale shift to increase all sizes site-wide */
+  --font-size-xs: 1.125rem;
+  --font-size-sm: 1.25rem;
+  --font-size-base: 1.5rem;
+  --font-size-lg: 1.75rem;
+  --font-size-xl: 2rem;
+  --font-size-2xl: 2.5rem;
+  --font-size-3xl: 3.5rem;
+  --font-size-4xl: 4.5rem;
+  --font-size-5xl: 5.5rem;
+  --font-size-6xl: 6.5rem;
+}
+
+:root {
+  --background: #FFFFFF;
+  /* Clean white background - Pito style */
+  --foreground: #0F172A;
+  /* High contrast text */
+  --cream-accent: #ebe4e4;
+  --medical-teal: #106EBE;
+  /* Corporate Blue */
+  --brand-mint: #0FFCBE;
+}
+
+body {
+  color: #1e293b;
+  /* Slate 800 for high-contrast readability */
+  background: var(--background);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* PITO DESIGN SYSTEM - Clean, Bold, Whitespace-Driven */
+
+/* Clean, simple shadow - minimal depth */
+.shadow-light {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.shadow-medium {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Typography Hierarchy */
+h1,
+h2,
+h3 {
+  letter-spacing: -0.5px;
+}
+
+/* Premium Glassmorphism Effect - Subtle Version */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px) saturate(190%);
+  -webkit-backdrop-filter: blur(20px) saturate(190%);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.04),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+.glass-panel-dark {
+  background: rgba(16, 110, 190, 0.85);
+  backdrop-filter: blur(20px) saturate(190%);
+  -webkit-backdrop-filter: blur(20px) saturate(190%);
+  border: 1px solid rgba(15, 252, 190, 0.2);
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.2),
+    inset 0 0 0 1px rgba(15, 252, 190, 0.1);
+}
+
+.glass-panel-teal {
+  background: rgba(16, 110, 190, 0.04);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(16, 110, 190, 0.15);
+  box-shadow:
+    0 8px 32px 0 rgba(16, 110, 190, 0.02),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+/* Button Styles - Pito Bold */
+.glass-button {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #111827;
+  font-weight: 600;
+}
+
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: var(--color-primary-500);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -5px rgba(16, 110, 190, 0.2);
+}
+
+/* Card Glow Effect */
+.glass-card-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card-glow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(800px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(16, 110, 190, 0.06), transparent 40%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Animations */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes float-slow {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-10px) rotate(3deg);
+  }
+
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+@keyframes pulse-soft {
+
+  0%,
+  100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+.animate-float-slow {
+  animation: float-slow 8s ease-in-out infinite;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 4s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(15, 252, 190, 0.3);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(15, 252, 190, 0.6);
+}
+
+/* Card Hover Effects - Premium & Interactive */
+.compact-card {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.compact-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 20px 25px -5px rgba(16, 110, 190, 0.08),
+    0 10px 10px -6px rgba(16, 110, 190, 0.08),
+    0 0 0 1px rgba(16, 110, 190, 0.2);
+  border-color: rgba(16, 110, 190, 0.3);
+}
+
+/* Button Active State */
+.compact-btn {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.compact-btn:active {
+  transform: scale(0.97);
+}
+
+/* Glow Button Effect */
+.glow-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+
+.glow-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.35),
+      transparent);
+  transition: all 0.55s ease;
+}
+
+.glow-btn:hover::after {
+  left: 100%;
+}
+
+/* Utility Classes */
+.dense-grid {
+  gap: 1rem;
+}
+
+.dense-padding {
+  padding: 1rem;
+}
+
+/* Pito Specific - Large Bold Text */
+.pito-heading {
+  font-size: clamp(2rem, 8vw, 4rem);
+  font-weight: 700;
+  letter-spacing: -1px;
+  line-height: 1.1;
+}
+
+.pito-subheading {
+  font-size: clamp(1.25rem, 4vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+/* Section Spacing - Pito Style */
+.pito-section {
+  padding: 5rem 0;
+}
+
+@media (max-width: 768px) {
+  .pito-section {
+    padding: 3rem 0;
+  }
+}
+
+/* Clean Border */
+.border-light {
+  border-color: #e2e8f0;
+}
+
+.border-lighter {
+  border-color: #f1f5f9;
+}
+
+/* Text Colors */
+.text-primary {
+  color: #106EBE;
+}
+
+.text-primary-light {
+  color: #0FFCBE;
+}
+
+/* Background Accents - Subtle */
+.bg-primary-subtle {
+  background-color: #eef7ff;
+}
+
+.bg-mint-subtle {
+  background-color: #f0fdf9;
+}
