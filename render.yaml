@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: pacemaker-backend
+    env: docker
+    dockerfilePath: pacemaker--main/Backend/Dockerfile
+    dockerContext: pacemaker--main/Backend
+    plan: free
+    region: singapore
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: DB_URL
+        fromDatabase:
+          name: pacemaker-db
+          property: connectionString
+      - key: DB_USERNAME
+        fromDatabase:
+          name: pacemaker-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: pacemaker-db
+          property: password
+      - key: HIBERNATE_DDL_AUTO
+        value: update
+      - key: JWT_SECRET
+        generateValue: true
+
+databases:
+  - name: pacemaker-db
+    databaseName: pacemaker
+    user: pacemaker_user
+    plan: free
+    region: singapore
