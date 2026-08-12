@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Repeat, Search, Plus, Play, Clock, Eye, Trash2, Film, CheckCircle2 } from 'lucide-react';
+import { Repeat, Search, Plus, Play, Clock, CheckCircle2, Trash2, Film } from 'lucide-react';
 import { DashboardSkeleton } from '@/components/Skeletons';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import SubscriptionGuard from '@/components/SubscriptionGuard';
@@ -17,41 +17,6 @@ interface RevisionVideo {
   videoUrl?: string;
 }
 
-const DEFAULT_REVISION_VIDEOS: RevisionVideo[] = [
-  {
-    id: 'rev-1',
-    title: 'High-Yield Pathology: Glomerular Diseases Rapid Recap',
-    subject: 'PATHOLOGY',
-    duration: '12 min',
-    instructor: 'Dr. Aman Gupta',
-    watched: true,
-  },
-  {
-    id: 'rev-2',
-    title: 'Pharmacology: Anti-Hypertensive Drug Classes & Mechanisms',
-    subject: 'PHARMACOLOGY',
-    duration: '15 min',
-    instructor: 'Dr. Neha Sharma',
-    watched: false,
-  },
-  {
-    id: 'rev-3',
-    title: 'Cardiology Crash Course: ECG Interpretation & Arrythmias',
-    subject: 'MEDICINE',
-    duration: '18 min',
-    instructor: 'Dr. Rajesh V',
-    watched: false,
-  },
-  {
-    id: 'rev-4',
-    title: 'Anatomy: Brachial Plexus Lesions & Clinical Correlates',
-    subject: 'ANATOMY',
-    duration: '10 min',
-    instructor: 'Dr. Priya Nair',
-    watched: false,
-  },
-];
-
 function RevisionVideosPage() {
   const { user } = useAuth();
   const isInstructorOrAdmin = user?.role === 'INSTRUCTOR' || user?.role === 'TRAINER' || user?.role === 'ADMIN';
@@ -66,16 +31,14 @@ function RevisionVideosPage() {
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) {
+        if (Array.isArray(parsed)) {
           setVideos(parsed);
-        } else {
-          setVideos(DEFAULT_REVISION_VIDEOS);
         }
       } catch {
-        setVideos(DEFAULT_REVISION_VIDEOS);
+        setVideos([]);
       }
     } else {
-      setVideos(DEFAULT_REVISION_VIDEOS);
+      setVideos([]);
     }
     setIsLoaded(true);
   }, []);
@@ -108,7 +71,7 @@ function RevisionVideosPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h1 className="text-2xl font-extrabold text-stone-900 tracking-tight">Revision Videos</h1>
-              <p className="text-sm font-medium text-stone-500 mt-0.5">High-yield rapid recap modules curated by faculty</p>
+              <p className="text-sm font-medium text-stone-500 mt-0.5">High-yield rapid recap modules uploaded by instructors</p>
             </div>
             {isInstructorOrAdmin && (
               <button
@@ -149,8 +112,8 @@ function RevisionVideosPage() {
             {filtered.length === 0 ? (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-16 bg-white rounded-2xl border border-stone-200/60 p-6">
                 <Repeat className="w-12 h-12 mx-auto mb-3 text-stone-300" />
-                <p className="font-bold text-stone-900">No revision videos found</p>
-                <p className="text-sm text-stone-500">Try adjusting your search criteria</p>
+                <p className="font-bold text-stone-900">No revision videos available yet</p>
+                <p className="text-sm text-stone-500">Revision videos will appear here once uploaded by an instructor.</p>
               </motion.div>
             ) : (
               filtered.map((video, i) => (
@@ -238,7 +201,7 @@ function RevisionVideosPage() {
                 <div className="aspect-video bg-stone-900 rounded-2xl flex flex-col items-center justify-center text-white p-6 text-center">
                   <Play className="w-16 h-16 text-primary-400 mb-3 animate-pulse" />
                   <p className="font-bold text-lg">Revision Video Player</p>
-                  <p className="text-xs text-stone-400 mt-1 max-w-md">Playing high-yield lecture summary for {activeVideo.title}</p>
+                  <p className="text-xs text-stone-400 mt-1 max-w-md">Playing lecture summary for {activeVideo.title}</p>
                 </div>
                 <div className="mt-4 flex justify-between items-center">
                   <span className="text-xs text-stone-500 font-medium">Duration: {activeVideo.duration}</span>

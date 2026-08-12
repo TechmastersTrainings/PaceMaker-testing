@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { MessageSquare, Plus, ThumbsUp, MessageCircle, Search, Trash2, Eye } from 'lucide-react';
+import { MessageSquare, Plus, ThumbsUp, Search, Trash2, Eye } from 'lucide-react';
 import { DashboardSkeleton } from '@/components/Skeletons';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import SubscriptionGuard from '@/components/SubscriptionGuard';
@@ -19,39 +19,6 @@ interface Discussion {
   createdAt: string;
 }
 
-const DEFAULT_DISCUSSIONS: Discussion[] = [
-  {
-    id: 'disc-1',
-    question: 'A 45-year-old male presents with sudden retrosternal chest pain radiating to left arm. ST elevation in leads II, III, aVF. What is the culprit artery?',
-    topic: 'CARDIOLOGY',
-    author: 'Dr. Aman Gupta (Faculty)',
-    replies: 18,
-    likes: 42,
-    explanation: 'Inferior wall MI with ST elevation in II, III, aVF is most commonly caused by occlusion of the Right Coronary Artery (RCA).',
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 'disc-2',
-    question: 'Which antibiotic is considered first-line for uncomplicated lower urinary tract infection in non-pregnant females?',
-    topic: 'PHARMACOLOGY',
-    author: 'Dr. Neha Sharma (Faculty)',
-    replies: 12,
-    likes: 29,
-    explanation: 'Nitrofurantoin or Fosfomycin / Trimethoprim-Sulfamethoxazole are first-line options for uncomplicated cystitis.',
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 'disc-3',
-    question: 'What is the characteristic histological finding on renal biopsy in Minimal Change Disease?',
-    topic: 'PATHOLOGY',
-    author: 'Dr. Rajesh V (Faculty)',
-    replies: 24,
-    likes: 56,
-    explanation: 'Normal appearance under light microscopy; electron microscopy reveals effacement of visceral epithelial cell foot processes.',
-    createdAt: new Date().toISOString(),
-  },
-];
-
 function McqDiscussionsPage() {
   const { user } = useAuth();
   const isInstructorOrAdmin = user?.role === 'INSTRUCTOR' || user?.role === 'TRAINER' || user?.role === 'ADMIN';
@@ -66,16 +33,14 @@ function McqDiscussionsPage() {
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) {
+        if (Array.isArray(parsed)) {
           setDiscussions(parsed);
-        } else {
-          setDiscussions(DEFAULT_DISCUSSIONS);
         }
       } catch {
-        setDiscussions(DEFAULT_DISCUSSIONS);
+        setDiscussions([]);
       }
     } else {
-      setDiscussions(DEFAULT_DISCUSSIONS);
+      setDiscussions([]);
     }
     setIsLoaded(true);
   }, []);
@@ -161,8 +126,8 @@ function McqDiscussionsPage() {
             {filtered.length === 0 ? (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-16 bg-white rounded-2xl border border-stone-200/60 p-6">
                 <MessageSquare className="w-12 h-12 mx-auto mb-3 text-stone-300" />
-                <p className="font-bold text-stone-900">No discussions found</p>
-                <p className="text-sm text-stone-500">Try searching for a different medical topic</p>
+                <p className="font-bold text-stone-900">No MCQ discussions posted yet</p>
+                <p className="text-sm text-stone-500">MCQ discussions created by instructors will appear here.</p>
               </motion.div>
             ) : (
               filtered.map((disc, i) => (
@@ -253,7 +218,7 @@ function McqDiscussionsPage() {
                   <div className="p-4 bg-primary-50/60 rounded-2xl border border-primary-200/60">
                     <p className="text-xs font-bold text-primary-700 uppercase tracking-wider mb-1">Faculty Clinical Explanation</p>
                     <p className="text-stone-800 text-xs leading-relaxed font-medium">
-                      {selectedDiscussion.explanation || 'Detailed high-yield clinical rationale provided by faculty instructor.'}
+                      {selectedDiscussion.explanation || 'Detailed clinical rationale provided by faculty instructor.'}
                     </p>
                   </div>
                 </div>

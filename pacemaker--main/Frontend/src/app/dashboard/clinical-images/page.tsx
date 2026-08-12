@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Image, Plus, Search, Trash2, Eye, ExternalLink, X } from 'lucide-react';
+import { Image, Plus, Search, Trash2, Eye, X } from 'lucide-react';
 import { DashboardSkeleton } from '@/components/Skeletons';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import SubscriptionGuard from '@/components/SubscriptionGuard';
@@ -17,36 +17,6 @@ interface ClinicalImage {
   createdAt: string;
 }
 
-const DEFAULT_CLINICAL_IMAGES: ClinicalImage[] = [
-  {
-    id: 'img-1',
-    title: 'Chest X-Ray: Right Middle Lobe Pneumonia',
-    subject: 'RADIOLOGY',
-    url: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&auto=format&fit=crop&q=80',
-    description: 'PA Chest Radiograph demonstrating classic lobar consolidation in the right middle lobe with silhouette sign along right heart border.',
-    keyFindings: 'Homogenous opacity in RML, Loss of right cardiac border definition, Air bronchograms visible.',
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 'img-2',
-    title: 'Fundoscopy: Non-Proliferative Diabetic Retinopathy',
-    subject: 'OPHTHALMOLOGY',
-    url: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&auto=format&fit=crop&q=80',
-    description: 'Retinal photography exhibiting microaneurysms, dot-and-blot hemorrhages, and hard exudates in the macular region.',
-    keyFindings: 'Microaneurysms, Hard exudates (lipid deposits), Cotton wool spots.',
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 'img-3',
-    title: 'Peripheral Blood Smear: Iron Deficiency Anemia',
-    subject: 'PATHOLOGY',
-    url: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&auto=format&fit=crop&q=80',
-    description: 'High-power light microscopy of peripheral blood smear showing marked microcytic hypochromic RBCs with central pallor > 1/3 diameter.',
-    keyFindings: 'Hypochromic RBCs, Anisopoikilocytosis, Pencil/cigar cells.',
-    createdAt: new Date().toISOString(),
-  },
-];
-
 function ClinicalImagesPage() {
   const { user } = useAuth();
   const isInstructorOrAdmin = user?.role === 'INSTRUCTOR' || user?.role === 'TRAINER' || user?.role === 'ADMIN';
@@ -61,16 +31,14 @@ function ClinicalImagesPage() {
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) {
+        if (Array.isArray(parsed)) {
           setImages(parsed);
-        } else {
-          setImages(DEFAULT_CLINICAL_IMAGES);
         }
       } catch {
-        setImages(DEFAULT_CLINICAL_IMAGES);
+        setImages([]);
       }
     } else {
-      setImages(DEFAULT_CLINICAL_IMAGES);
+      setImages([]);
     }
     setIsLoaded(true);
   }, []);
@@ -97,7 +65,7 @@ function ClinicalImagesPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h1 className="text-2xl font-extrabold text-stone-900 tracking-tight">Clinical Images Library</h1>
-              <p className="text-sm font-medium text-stone-500 mt-0.5">High-resolution medical imaging and diagnostic clinical references</p>
+              <p className="text-sm font-medium text-stone-500 mt-0.5">High-resolution medical imaging and diagnostic clinical references uploaded by instructors</p>
             </div>
             {isInstructorOrAdmin && (
               <button
@@ -141,8 +109,8 @@ function ClinicalImagesPage() {
             {filtered.length === 0 ? (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="col-span-full text-center py-16 bg-white rounded-2xl border border-stone-200/60 p-6">
                 <Image className="w-12 h-12 mx-auto mb-3 text-stone-300" />
-                <p className="font-bold text-stone-900">No clinical images found</p>
-                <p className="text-sm text-stone-500">Try searching for a different image topic</p>
+                <p className="font-bold text-stone-900">No clinical images uploaded yet</p>
+                <p className="text-sm text-stone-500">Clinical reference images uploaded by instructors will appear here.</p>
               </motion.div>
             ) : (
               filtered.map((img, i) => (
@@ -158,9 +126,6 @@ function ClinicalImagesPage() {
                       src={img.url}
                       alt={img.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-90 group-hover:opacity-100"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&auto=format&fit=crop&q=80';
-                      }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
                       <span className="text-white text-xs font-bold flex items-center gap-1"><Eye className="w-3.5 h-3.5" /> View High-Res</span>
@@ -225,9 +190,6 @@ function ClinicalImagesPage() {
                     src={activeImage.url}
                     alt={activeImage.title}
                     className="w-full h-full object-contain"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&auto=format&fit=crop&q=80';
-                    }}
                   />
                 </div>
 

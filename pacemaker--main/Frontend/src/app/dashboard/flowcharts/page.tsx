@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { GitBranch, Plus, Search, Trash2, Eye, FileText, ChevronRight } from 'lucide-react';
+import { GitBranch, Plus, Search, Trash2, Eye, ChevronRight } from 'lucide-react';
 import { DashboardSkeleton } from '@/components/Skeletons';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import SubscriptionGuard from '@/components/SubscriptionGuard';
@@ -15,33 +15,6 @@ interface Flowchart {
   steps?: string[];
   createdAt: string;
 }
-
-const DEFAULT_FLOWCHARTS: Flowchart[] = [
-  {
-    id: 'fc-1',
-    title: 'Diagnostic Approach to Acute Chest Pain',
-    subject: 'MEDICINE',
-    description: 'Algorithmic decision tree for emergency room triage: ECG -> Cardiac Biomarkers -> Risk Stratification -> Cath Lab / Observation.',
-    steps: ['1. Immediate 12-Lead ECG within 10 mins', '2. Check High-Sensitivity Troponin I/T', '3. Assess TIMI / HEART Risk Score', '4. Direct to Coronary Angiography if STEMI'],
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 'fc-2',
-    title: 'Management Algorithm for Diabetic Ketoacidosis (DKA)',
-    subject: 'ENDOCRINOLOGY',
-    description: 'Step-by-step fluid resuscitation, IV regular insulin titration, and potassium monitoring flow chart.',
-    steps: ['1. Fluid Resuscitation (0.9% NaCl 1-1.5L in 1st hour)', '2. Check K+ levels (If < 3.3 mEq/L hold insulin & give K+)', '3. IV Regular Insulin 0.1 U/kg/hr infusion', '4. Add D5W when blood glucose < 200 mg/dL'],
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 'fc-3',
-    title: 'Anemia Diagnostic Flowchart: Microcytic vs Macrocytic',
-    subject: 'PATHOLOGY',
-    description: 'Workup algorithm starting from MCV values -> Iron profile / Serum Ferritin vs B12/Folate assays.',
-    steps: ['1. Evaluate MCV (<80 fL: Microcytic, 80-100 fL: Normocytic, >100 fL: Macrocytic)', '2. Microcytic: Order Serum Ferritin, TIBC, Iron', '3. Macrocytic: Order Vitamin B12, Folate & Reticulocyte count'],
-    createdAt: new Date().toISOString(),
-  },
-];
 
 function FlowchartsPage() {
   const { user } = useAuth();
@@ -57,16 +30,14 @@ function FlowchartsPage() {
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) {
+        if (Array.isArray(parsed)) {
           setFlowcharts(parsed);
-        } else {
-          setFlowcharts(DEFAULT_FLOWCHARTS);
         }
       } catch {
-        setFlowcharts(DEFAULT_FLOWCHARTS);
+        setFlowcharts([]);
       }
     } else {
-      setFlowcharts(DEFAULT_FLOWCHARTS);
+      setFlowcharts([]);
     }
     setIsLoaded(true);
   }, []);
@@ -93,7 +64,7 @@ function FlowchartsPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h1 className="text-2xl font-extrabold text-stone-900 tracking-tight">Clinical Flowcharts</h1>
-              <p className="text-sm font-medium text-stone-500 mt-0.5">Visual decision algorithms and clinical diagnostic flowcharts</p>
+              <p className="text-sm font-medium text-stone-500 mt-0.5">Visual decision algorithms and clinical diagnostic flowcharts created by instructors</p>
             </div>
             {isInstructorOrAdmin && (
               <button
@@ -134,8 +105,8 @@ function FlowchartsPage() {
             {filtered.length === 0 ? (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="col-span-full text-center py-16 bg-white rounded-2xl border border-stone-200/60 p-6">
                 <GitBranch className="w-12 h-12 mx-auto mb-3 text-stone-300" />
-                <p className="font-bold text-stone-900">No flowcharts found</p>
-                <p className="text-sm text-stone-500">Try searching for a different clinical algorithm</p>
+                <p className="font-bold text-stone-900">No flowcharts available yet</p>
+                <p className="text-sm text-stone-500">Flowcharts created by instructors will appear here.</p>
               </motion.div>
             ) : (
               filtered.map((fc, i) => (
