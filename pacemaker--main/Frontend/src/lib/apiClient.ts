@@ -1,13 +1,14 @@
-import axios, { 
-  AxiosInstance, 
-  InternalAxiosRequestConfig, 
-  AxiosResponse, 
-  AxiosError 
+//pacemaker--main/Frontend/src/lib/apiClient.ts
+import axios, {
+  AxiosInstance,
+  InternalAxiosRequestConfig,
+  AxiosResponse,
+  AxiosError
 } from 'axios';
 
-const isLocalhost = typeof window !== 'undefined' && 
+const isLocalhost = typeof window !== 'undefined' &&
   (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-export const API_HOST = process.env.NEXT_PUBLIC_API_URL || 
+export const API_HOST = process.env.NEXT_PUBLIC_API_URL ||
   (isLocalhost ? 'http://localhost:8080' : 'https://pacemaker-testing-3.onrender.com');
 const BASE_URL = `${API_HOST.replace(/\/$/, '')}/api/v1`;
 
@@ -39,15 +40,15 @@ apiClient.interceptors.response.use(
     // Handle Auto-token refresh from headers if backend sends it
     const newToken = response.headers['authorization'];
     if (newToken && typeof window !== 'undefined') {
-       const bare = newToken.replace('Bearer ', '');
-       localStorage.setItem('token', bare);
+      const bare = newToken.replace('Bearer ', '');
+      localStorage.setItem('token', bare);
     }
 
     // Standardized Unwrapping logic
     const data = response.data;
     if (data && typeof data === 'object' && 'success' in data) {
       if (data.success === false) {
-         return Promise.reject(new Error(data.message || 'Server error'));
+        return Promise.reject(new Error(data.message || 'Server error'));
       }
       return { ...response, data: data.data };
     }
@@ -62,9 +63,9 @@ apiClient.interceptors.response.use(
     }
 
     if (error.response.status === 401 && typeof window !== 'undefined') {
-       localStorage.removeItem('token');
-       localStorage.removeItem('currentUser');
-       localStorage.removeItem('userRole');
+      localStorage.removeItem('token');
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('userRole');
     }
 
     const message = error.response.data?.message || `Error ${error.response.status}`;
