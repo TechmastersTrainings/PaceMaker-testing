@@ -8,7 +8,7 @@ import axios, {
 const isLocalhost = typeof window !== 'undefined' && 
   (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 export const API_HOST = process.env.NEXT_PUBLIC_API_URL || 
-  (isLocalhost ? 'http://localhost:8080' : 'YOUR_RENDER_BACKEND_URL');
+  (isLocalhost ? 'http://localhost:8080' : 'https://pacemaker-testing-3.onrender.com');
 const BASE_URL = `${API_HOST.replace(/\/$/, '')}/api/v1`;
 
 export const apiClient: AxiosInstance = axios.create({

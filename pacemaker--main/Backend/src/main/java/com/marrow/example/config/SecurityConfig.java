@@ -44,7 +44,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOrigins(Arrays.asList(
+        config.setAllowedOriginPatterns(Arrays.asList(
             "http://localhost:3000",   // Next.js Frontend
             "http://localhost:8081",   // Expo Web
             "http://10.0.2.2:8080",    // Android Emulator reverse proxy
