@@ -116,7 +116,8 @@ public class SecurityConfig {
                     "/api/v1/notifications/welcome",
                     "/api/v1/notifications/payment-confirmation",
                     "/api/v1/sso/discourse/login",
-                    "/api/v1/sso/discourse/validate"
+                    "/api/v1/sso/discourse/validate",
+                    "/api/v1/newsletter/**"
                 ).permitAll()
                 // Everything else requires a valid JWT
                 .anyRequest().authenticated()
