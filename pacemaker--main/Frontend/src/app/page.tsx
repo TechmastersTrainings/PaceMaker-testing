@@ -6,9 +6,9 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Activity, BookOpen, Users, Award, PlayCircle, ArrowRight, Sparkles, 
-  CheckCircle2, Send, Brain, TrendingUp, Target, FileText, Check, 
+  CheckCircle2, Send, TrendingUp, Target, FileText, Check, 
   HelpCircle, ChevronDown, Mail, ShieldCheck, Zap, BookMarked, 
-  Stethoscope, Layers, Lightbulb, Clock, Video, BarChart3
+  Stethoscope, Layers, Lightbulb, Clock, Video, BarChart3, MessageSquare
 } from 'lucide-react';
 import { courseService, Course } from '@/services/courseService';
 import apiClient from '@/lib/apiClient';
@@ -83,11 +83,11 @@ export default function Home() {
       badge: 'Simulations'
     },
     {
-      title: 'AI Medical Tutor',
-      desc: 'Retrieval-Augmented AI engine for clinical case breakdowns and instant study reports.',
-      icon: <Brain className="w-6 h-6 text-[#106EBE]" />,
+      title: 'Clinical Discussion Hub',
+      desc: 'Peer and consultant case discussions for diagnostic reasoning and case breakdowns.',
+      icon: <MessageSquare className="w-6 h-6 text-[#106EBE]" />,
       href: '/register',
-      badge: 'AI Engine'
+      badge: 'Case Hub'
     },
     {
       title: 'High-Yield Notes',
@@ -108,11 +108,11 @@ export default function Home() {
   const faqs = [
     { 
       q: "What is PaceMaker Academy?", 
-      a: "PaceMaker is a Learning Management System (LMS) designed for medical students and aspirants. It integrates video courses, clinical Q-Banks, simulated grand tests, and AI-assisted study tools." 
+      a: "PaceMaker is a Learning Management System (LMS) designed for medical students and aspirants. It integrates video courses, clinical Q-Banks, simulated grand tests, and high-yield study tools." 
     },
     { 
-      q: "How does the AI Medical Tutor work?", 
-      a: "The AI Tutor utilizes a Retrieval-Augmented Generation (RAG) pipeline trained on medical reference materials to provide instant explanations, differential diagnosis breakdowns, and downloadable summaries." 
+      q: "What study materials are included?", 
+      a: "PaceMaker provides access to structured clinical video lectures, case-based Q-Banks, grand test series, clinical flowcharts, radiology image banks, and subject revision guides." 
     },
     { 
       q: "Is there mobile app support?", 
@@ -155,7 +155,7 @@ export default function Home() {
               </h1>
 
               <p className="text-base sm:text-lg text-white/90 mb-8 leading-relaxed max-w-xl font-normal">
-                Access structured video lectures, case-based Q-Banks, simulated grand tests, and AI-powered study assistance in one platform.
+                Access structured video lectures, case-based Q-Banks, simulated grand tests, and clinical study materials in one platform.
               </p>
 
               {/* Action Buttons */}
@@ -178,10 +178,10 @@ export default function Home() {
               {/* Feature Pills */}
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 pt-4 border-t border-white/10 w-full text-xs font-semibold text-white/80">
                 <span className="flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-[#0FFCBE]" /> Structured Medical Curriculum
+                  <ShieldCheck className="w-4 h-4 text-[#0FFCBE]" /> Structured MBBS Curriculum
                 </span>
                 <span className="flex items-center gap-2">
-                  <Zap className="w-4 h-4 text-[#0FFCBE]" /> AI Clinical RAG
+                  <BookOpen className="w-4 h-4 text-[#0FFCBE]" /> High-Yield Q-Bank
                 </span>
                 <span className="flex items-center gap-2">
                   <Stethoscope className="w-4 h-4 text-[#0FFCBE]" /> Case Vignettes
@@ -189,7 +189,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Right Hero Feature Preview Card */}
+            {/* Right Hero Authentic Medical Study Overview Card */}
             <div className="lg:col-span-5 w-full flex justify-center">
               <motion.div 
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -201,13 +201,13 @@ export default function Home() {
 
                 <div className="flex items-center justify-between border-b border-white/15 pb-4 mb-4">
                   <div className="flex items-center gap-2.5">
-                    <Brain className="w-4 h-4 text-[#0FFCBE]" />
+                    <Stethoscope className="w-4 h-4 text-[#0FFCBE]" />
                     <span className="text-xs font-bold uppercase tracking-wider text-white">
-                      AI Study Assistant
+                      MBBS Medical Study Suite
                     </span>
                   </div>
                   <span className="text-[10px] font-extrabold bg-[#0FFCBE]/20 text-[#0FFCBE] px-2.5 py-1 rounded-full border border-[#0FFCBE]/30">
-                    Active
+                    Active Portal
                   </span>
                 </div>
 
@@ -217,7 +217,7 @@ export default function Home() {
                       Clinical Vignettes & Q-Bank
                     </div>
                     <p className="text-white/90 leading-relaxed font-normal">
-                      Practice case-based questions with instant explanations and diagnostic key points.
+                      Practice case-based questions with detailed explanations and diagnostic key points.
                     </p>
                   </div>
 
@@ -404,7 +404,7 @@ export default function Home() {
         </div>
       </motion.section>
 
-      {/* RAG Engine & Methodology Section */}
+      {/* Methodology Section */}
       <motion.section
         variants={sectionVariants}
         initial="hidden"
@@ -427,7 +427,7 @@ export default function Home() {
                 <ul className="space-y-4">
                   {[
                     'Clinical vignette practice with distractor analysis',
-                    'Interactive AI study assistant for question queries',
+                    'Subject-wise progress tracking & error analysis',
                     'Simulated exam environments with timers',
                     'Downloadable study resources and revision notes'
                   ].map((text, idx) => (
